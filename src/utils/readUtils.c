@@ -31,10 +31,9 @@ void readFromStdin(char* input) {
 	input[-1]='\0';
 }
 
-char currentCharFile[1];
-
 //sposta il puntatore di k righe in avanti
-void changeLine(int fd, int k) {	
+void changeLine(int fd, int k) {
+	char currentCharFile[1];	
 	for (int i=0;i<k;i++) {
 		while(currentCharFile[0]!='\n') {
 			read(fd,currentCharFile,1);
@@ -44,6 +43,7 @@ void changeLine(int fd, int k) {
 
 //sposta il puntatore di k campi in avanti
 void skipToField(int fd, int k) {
+	char currentCharFile[1];
 	for (int i=0;i<k;i++) {
 		while(currentCharFile[0]!='|') {
 			read(fd,currentCharFile,1);
@@ -54,6 +54,7 @@ void skipToField(int fd, int k) {
 
 //confronta ciò che legge dal file con una stringa passata
 int verify(int fd, char* contentFromInput){
+	char currentCharFile[1];
 	int i=0;
 	do {
 		if(read(fd,currentCharFile,1)==0) return FALSE;

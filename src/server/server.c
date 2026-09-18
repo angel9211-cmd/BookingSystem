@@ -53,7 +53,8 @@ int main (void) {
 		supplier_startSession(clientFd,username,password,priviledges);
 		write(clientFd,priviledges,strlen(priviledges)+1);
 		if (priviledges[0]=='0') {
-			int myReservationsFd = createUserView();
+			printf("sto per creare view\n");
+			int myReservationsFd = createUserView(username);
 			supplier_userMainCicle(clientFd,myReservationsFd);
 			unlink("/myReservations.txt");
 			}

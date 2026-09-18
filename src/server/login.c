@@ -41,8 +41,8 @@ int login
 		message = "Server: successfully logged in\n";
 		priviledges[0] = '0';
 		write(clientFd,message,strlen(message)+1);
-		return USER_FOUND;
 		close(usersFd);
+		return USER_FOUND;
 	}
 	close(usersFd);
 	message = "Server: successfully logged in as amministrator\n";
