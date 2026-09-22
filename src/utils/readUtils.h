@@ -6,5 +6,7 @@ void readIntoString(int, char*);
 void readFromStdin(char*);
 void changeLine(int,int);
 void skipToField(int,int);
-int verify(int,char*);
+void backToStartField(int);
+int verifyUserExists(int,char*);
+int confrontFromFile(int,char*);
 int searchSpaces(char*);

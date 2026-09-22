@@ -4,6 +4,7 @@
 #include "login.h"
 #include "readUtils.h"
 #include "createUser.h"
+#include "DBUtils.h"
 
 char* message;
 char option [2] = "0";
@@ -68,7 +69,9 @@ void supplier_startSession
 }
 
 
-int supplier_userMainCicle(int clientFd,int myReservationsFd) {
+int supplier_userMainCicle(int clientFd,char* username) {
+	printf("sto per creare view\n");
+	int myReservationsFd = createUserView(username);
 	do {
 		message = "Choose next action to execute:\n";
 		write(clientFd,message,strlen(message)+1);
@@ -79,6 +82,9 @@ int supplier_userMainCicle(int clientFd,int myReservationsFd) {
 		readIntoString(clientFd,option);
 		switch (option[0])	{
 			case '0':
+				char filePath [20];
+				sprintf(filePath,"%sReservations.txt",username);
+				unlink(filePath);
 				return 0;
 			case '1': 
 				printf("option 1\n");

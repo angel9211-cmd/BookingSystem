@@ -22,14 +22,14 @@ int login
 	write(clientFd,message,strlen(message)+1);
 	readIntoString(clientFd,password);
 
-	if(verify(usersFd,username)!=TRUE) {
+	if(verifyUserExists(usersFd,username)!=TRUE) {
 		message="User not found, please try again\n";
 		write(clientFd,message,strlen(message)+1);
 		close(usersFd);
 		return ERR_USER_NOT_FOUND;
 	}
 	skipToField(usersFd,1);
-	if(verify(usersFd,password)!=TRUE){
+	if(confrontFromFile(usersFd,password)!=TRUE){
 		message="Wrong password, please try again\n";
 		write(clientFd,message,strlen(message)+1);
 		close(usersFd);
@@ -37,7 +37,7 @@ int login
 	}
 	skipToField(usersFd,1);
 	char amministrator [2] = "1";
-	if(verify(usersFd,amministrator)!=TRUE){
+	if(confrontFromFile(usersFd,amministrator)!=TRUE){
 		message = "Server: successfully logged in\n";
 		priviledges[0] = '0';
 		write(clientFd,message,strlen(message)+1);

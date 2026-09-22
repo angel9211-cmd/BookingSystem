@@ -14,15 +14,21 @@
 //funzioni che creano file da usare come viste
 int createUserView(char* username){
 	char filePath [20];
-	printf("sto per fare sprintf\n");
-	sprintf(filePath,"/%sReservations.txt",username);
-	printf("il filepath è %s\n",filePath);
+	char buffer[1]; // buffer per poter usare read()
+	sprintf(filePath,"%sReservations.txt",username);
 	int myReservationsFd=open(filePath, O_CREAT|O_RDWR, 0660);
-	printf("creato fileview\n");
 	int reservationsFd=open("../reservations.txt", O_RDWR);
-	printf("aperto file users\n");
-	copyRecord(reservationsFd,myReservationsFd);
-	printf("fatto copyrecord\n");
+	while (read(reservationsFd,buffer,1)!=0) {
+		skipToField(reservationsFd,1); // spostamento su campo username
+		printf("spostamento campo username\n");
+		if (confrontFromFile(reservationsFd,username)==TRUE) {
+			printf("fatto confronto\n");
+			backToStartField(reservationsFd); /*TODO: si blocca qui*/
+			printf("spostamento inizio\n");
+			copyRecord(reservationsFd,myReservationsFd);
+			printf("fatto copyrecord\n");
+		}
+	}
 	close(reservationsFd);
 	close(myReservationsFd);
 	return myReservationsFd;

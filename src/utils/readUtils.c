@@ -52,20 +52,40 @@ void skipToField(int fd, int k) {
 	}
 }
 
-//confronta ciò che legge dal file con una stringa passata
-int verify(int fd, char* contentFromInput){
+//sposta il puntatore all'inizio del record
+void backToStartField(int fd) {
+	char currentCharFile[1];
+	while(currentCharFile[0]!='\n') {
+		lseek(fd,-2,SEEK_CUR);
+		read(fd,currentCharFile,1);
+	}
+}
+
+//ricerca da Users.txt un record col nome utente passato
+int verifyUserExists(int usersFd, char* username){
 	char currentCharFile[1];
 	int i=0;
 	do {
-		if(read(fd,currentCharFile,1)==0) return FALSE;
-		if (currentCharFile[0]!=contentFromInput[i]) {
+		if(read(usersFd,currentCharFile,1)==0) return FALSE;
+		if (currentCharFile[0]!=username[i]) {
 			if(currentCharFile[0]==' ') return FALSE;
-			changeLine(fd,1);
+			changeLine(usersFd,1);
 			i=-1;
 			}
 		i++;
-	} while (contentFromInput[i]!='\0');
-	
+	} while (username[i]!='\0');
+	return TRUE;
+}
+
+//confronta ciò che legge dal file con una stringa passata
+int confrontFromFile(int fd, char* inputString) {
+	char currentCharFile[1];
+	int i=0;
+	while (inputString[i]!='\0'){
+		read(fd,currentCharFile,1);
+		if(currentCharFile[0]!=inputString[i]) return FALSE;
+		i++;
+	}
 	return TRUE;
 }
 
