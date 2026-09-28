@@ -3,6 +3,7 @@
 #define FALSE 0
 void readAndPrint(int, char*);
 void readIntoString(int, char*);
+char* fileIntoString(int);
 void readFromStdin(char*);
 void changeLine(int,int);
 void skipToField(int,int);

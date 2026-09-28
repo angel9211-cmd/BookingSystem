@@ -5,30 +5,50 @@
 #include <string.h>
 #include "readUtils.h"
 
-//legge da file e stampa a video
-void readAndPrint(int fd, char* input) {
+//TODO: quando legge da reservations non copia anche l'id
+
+//legge da file e stampa a video in locale
+void readAndPrint(int fd, char* buffer) {
 	int end;
 	do {
-		end = read(fd,input,1);
-		printf("%c",input[0]);
-	} while (end>0 && (*input++)!='\0');
+		end = read(fd,buffer,1);
+		printf("%c",buffer[0]);
+	} while (end>0 && (*buffer++)!='\0');
 }
 
+
 //legge da file e salva su buffer
-void readIntoString(int fd, char* input) {
+void readIntoString(int fd, char* buffer) {
 	int end;
+//	printf("file: ");
 	do {
-		end = read(fd,input,1);
-	} while (end>0 && (*input++)!='\0');
+		end = read(fd,buffer,1);
+		//printf("%c",buffer[0]);
+	} while (end>0 && (*buffer++)!='\0');
+//	printf("\n");
+}
+
+char* fileIntoString(int fd) {
+	int fileSize;
+	char counter[1];
+	while(read(fd,counter,1)!=0){
+		fileSize++;
+	}
+	char* fileBuffer = calloc(fileSize+1,sizeof(char));
+	lseek(fd,0,SEEK_SET);
+	read(fd,fileBuffer,fileSize);
+	fileBuffer[fileSize+1] = '\n';
+	return fileBuffer;
+	
 }
 
 //legge da input e salva su buffer
-void readFromStdin(char* input) {
+void readFromStdin(char* buffer) {
 	int end;
 	do {
-		end = read(0,input,1);
-	} while (end>0 && (*input++)!='\n');
-	input[-1]='\0';
+		end = read(0,buffer,1);
+	} while (end>0 && (*buffer++)!='\n');
+	buffer[-1]='\0';
 }
 
 //sposta il puntatore di k righe in avanti
@@ -55,8 +75,9 @@ void skipToField(int fd, int k) {
 //sposta il puntatore all'inizio del record
 void backToStartField(int fd) {
 	char currentCharFile[1];
-	while(currentCharFile[0]!='\n') {
-		lseek(fd,-2,SEEK_CUR);
+	int offset = 1;
+	while(currentCharFile[0]!='\n' && offset!=0 ) {
+		offset=lseek(fd,-2,SEEK_CUR);
 		read(fd,currentCharFile,1);
 	}
 }
@@ -90,10 +111,10 @@ int confrontFromFile(int fd, char* inputString) {
 }
 
 //controlla che all'interno della stringa in input ci siano spazi
-int searchSpaces(char* input) {
+int searchSpaces(char* string) {
 	int i;
-	for(i=0;i<strlen(input)+1;i++) {
-		if(input[i]==' ') return FALSE;
+	for(i=0;i<strlen(string)+1;i++) {
+		if(string[i]==' ') return FALSE;
 	}
 	return TRUE;		
 }

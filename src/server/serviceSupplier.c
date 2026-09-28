@@ -1,10 +1,13 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
 #include "login.h"
 #include "readUtils.h"
 #include "createUser.h"
 #include "DBUtils.h"
+#include <errno.h>
 
 char* message;
 char option [2] = "0";
@@ -70,8 +73,8 @@ void supplier_startSession
 
 
 int supplier_userMainCicle(int clientFd,char* username) {
-	printf("sto per creare view\n");
-	int myReservationsFd = createUserView(username);
+	char* filePath;
+	filePath = createUserView(username);
 	do {
 		message = "Choose next action to execute:\n";
 		write(clientFd,message,strlen(message)+1);
@@ -82,12 +85,16 @@ int supplier_userMainCicle(int clientFd,char* username) {
 		readIntoString(clientFd,option);
 		switch (option[0])	{
 			case '0':
-				char filePath [20];
-				sprintf(filePath,"%sReservations.txt",username);
+				//sprintf(filePath,"%sReservations.txt",username);
 				unlink(filePath);
+				free(filePath);
 				return 0;
-			case '1': 
-				printf("option 1\n");
+			case '1':
+			//TODO: tentare di sostituire file con message
+				printf("%s\n",filePath);
+				int myReservationsFd=open(filePath,O_RDONLY);
+				char* file=fileIntoString(myReservationsFd);
+				write(clientFd,file,strlen(file)+1);
 				break;
 			case '2': 
 				printf("option 2\n");

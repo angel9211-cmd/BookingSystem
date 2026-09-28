@@ -12,26 +12,22 @@
 // fermati
 
 //funzioni che creano file da usare come viste
-int createUserView(char* username){
-	char filePath [20];
+char* createUserView(char* username){
+	char* filePath = calloc(20, sizeof(char));
 	char buffer[1]; // buffer per poter usare read()
 	sprintf(filePath,"%sReservations.txt",username);
 	int myReservationsFd=open(filePath, O_CREAT|O_RDWR, 0660);
-	int reservationsFd=open("../reservations.txt", O_RDWR);
+	int reservationsFd=open("../reservations.txt", O_RDONLY);
 	while (read(reservationsFd,buffer,1)!=0) {
 		skipToField(reservationsFd,1); // spostamento su campo username
-		printf("spostamento campo username\n");
 		if (confrontFromFile(reservationsFd,username)==TRUE) {
-			printf("fatto confronto\n");
-			backToStartField(reservationsFd); /*TODO: si blocca qui*/
-			printf("spostamento inizio\n");
+			backToStartField(reservationsFd);
 			copyRecord(reservationsFd,myReservationsFd);
-			printf("fatto copyrecord\n");
 		}
 	}
 	close(reservationsFd);
 	close(myReservationsFd);
-	return myReservationsFd;
+	return filePath;
 }
 	
 int createTempView(){

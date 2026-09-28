@@ -90,7 +90,7 @@ int handler_userMainCicle(int clientFd) {
 			case '0':
 				return 0;
 			case '1':
-				printf("client: option 1\n");
+				readAndPrint(clientFd,message);
 				break;
 			case '2':
 				printf("client: option2\n");

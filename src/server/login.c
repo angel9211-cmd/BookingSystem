@@ -7,6 +7,8 @@
 #include "login.h"
 #include "readUtils.h"
 
+//TODO: a volte login non controlla bene input utente
+
 int login
 (int clientFd,char* username, char* password,char* priviledges) {
 	int usersFd=open("../users.txt", O_RDONLY);
