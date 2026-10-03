@@ -24,7 +24,7 @@ int login
 	write(clientFd,message,strlen(message)+1);
 	readIntoString(clientFd,password);
 
-	if(verifyUserExists(usersFd,username)!=TRUE) {
+	if(userExists(usersFd,username)!=TRUE) {
 		message="User not found, please try again\n";
 		write(clientFd,message,strlen(message)+1);
 		close(usersFd);

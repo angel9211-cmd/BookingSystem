@@ -31,7 +31,7 @@ int createUser
 		close(usersFd);
 		return USER_NOT_CREATED;
 	}
-	if(verifyUserExists(usersFd,username)==TRUE) {
+	if(userExists(usersFd,username)==TRUE) {
 		message = "Username already exists, please try again:\n";
 		write(clientFd,message,strlen(message)+1);
 		close(usersFd);

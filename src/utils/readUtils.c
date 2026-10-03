@@ -3,9 +3,12 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 #include "readUtils.h"
 
 //TODO: quando legge da reservations non copia anche l'id
+
+char currentCharFile[1];
 
 //legge da file e stampa a video in locale
 void readAndPrint(int fd, char* buffer) {
@@ -20,12 +23,9 @@ void readAndPrint(int fd, char* buffer) {
 //legge da file e salva su buffer
 void readIntoString(int fd, char* buffer) {
 	int end;
-//	printf("file: ");
 	do {
-		end = read(fd,buffer,1);
-		//printf("%c",buffer[0]);
-	} while (end>0 && (*buffer++)!='\0');
-//	printf("\n");
+		end = read(fd,buffer,1);;
+	} while (end!=0 && *buffer++!='\0');
 }
 
 char* fileIntoString(int fd) {
@@ -52,8 +52,7 @@ void readFromStdin(char* buffer) {
 }
 
 //sposta il puntatore di k righe in avanti
-void changeLine(int fd, int k) {
-	char currentCharFile[1];	
+void changeLine(int fd, int k) {	
 	for (int i=0;i<k;i++) {
 		while(currentCharFile[0]!='\n') {
 			read(fd,currentCharFile,1);
@@ -63,7 +62,6 @@ void changeLine(int fd, int k) {
 
 //sposta il puntatore di k campi in avanti
 void skipToField(int fd, int k) {
-	char currentCharFile[1];
 	for (int i=0;i<k;i++) {
 		while(currentCharFile[0]!='|') {
 			read(fd,currentCharFile,1);
@@ -74,7 +72,6 @@ void skipToField(int fd, int k) {
 
 //sposta il puntatore all'inizio del record
 void backToStartField(int fd) {
-	char currentCharFile[1];
 	int offset = 1;
 	while(currentCharFile[0]!='\n' && offset!=0 ) {
 		offset=lseek(fd,-2,SEEK_CUR);
@@ -83,8 +80,7 @@ void backToStartField(int fd) {
 }
 
 //ricerca da Users.txt un record col nome utente passato
-int verifyUserExists(int usersFd, char* username){
-	char currentCharFile[1];
+int userExists(int usersFd, char* username){
 	int i=0;
 	do {
 		if(read(usersFd,currentCharFile,1)==0) return FALSE;
@@ -100,7 +96,6 @@ int verifyUserExists(int usersFd, char* username){
 
 //confronta ciò che legge dal file con una stringa passata
 int confrontFromFile(int fd, char* inputString) {
-	char currentCharFile[1];
 	int i=0;
 	while (inputString[i]!='\0'){
 		read(fd,currentCharFile,1);

@@ -8,6 +8,6 @@ void readFromStdin(char*);
 void changeLine(int,int);
 void skipToField(int,int);
 void backToStartField(int);
-int verifyUserExists(int,char*);
+int userExists(int,char*);
 int confrontFromFile(int,char*);
 int searchSpaces(char*);

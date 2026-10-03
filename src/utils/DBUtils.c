@@ -13,16 +13,20 @@
 
 //funzioni che creano file da usare come viste
 char* createUserView(char* username){
+	//TODO: aggiungere messaggio in caso no reservations
 	char* filePath = calloc(20, sizeof(char));
 	char buffer[1]; // buffer per poter usare read()
+	int end;
 	sprintf(filePath,"%sReservations.txt",username);
 	int myReservationsFd=open(filePath, O_CREAT|O_RDWR, 0660);
 	int reservationsFd=open("../reservations.txt", O_RDONLY);
-	while (read(reservationsFd,buffer,1)!=0) {
+	while (read(reservationsFd,buffer,1)>0) {
 		skipToField(reservationsFd,1); // spostamento su campo username
 		if (confrontFromFile(reservationsFd,username)==TRUE) {
 			backToStartField(reservationsFd);
 			copyRecord(reservationsFd,myReservationsFd);
+		} else {
+			changeLine(reservationsFd,1);
 		}
 	}
 	close(reservationsFd);

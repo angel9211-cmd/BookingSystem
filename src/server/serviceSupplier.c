@@ -85,13 +85,10 @@ int supplier_userMainCicle(int clientFd,char* username) {
 		readIntoString(clientFd,option);
 		switch (option[0])	{
 			case '0':
-				//sprintf(filePath,"%sReservations.txt",username);
 				unlink(filePath);
 				free(filePath);
 				return 0;
 			case '1':
-			//TODO: tentare di sostituire file con message
-				printf("%s\n",filePath);
 				int myReservationsFd=open(filePath,O_RDONLY);
 				char* file=fileIntoString(myReservationsFd);
 				write(clientFd,file,strlen(file)+1);

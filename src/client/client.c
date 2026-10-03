@@ -37,7 +37,8 @@ int main(void) {
 	handler_startSession(clientFd);
 	readIntoString(clientFd,priviledges);
 	//ciclo esecuzione
-	if(priviledges[0]=='0') handler_userMainCicle(clientFd);
+	if(priviledges[0]=='0')
+		handler_userMainCicle(clientFd);
 	// ciclo amm
 	printf("Client: closing connection...\n");
 	close(clientFd);
