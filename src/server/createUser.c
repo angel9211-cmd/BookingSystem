@@ -8,7 +8,7 @@
 #include "createUser.h"
 
 //TODO controllare lunghezza user e password lato client
-
+// TODO aggiungere lock per la scrittura
 int createUser
 (int clientFd,char* username, char* password,char* priviledges) {
 	int usersFd=open("../users.txt", O_RDWR | O_CREAT, 0660);

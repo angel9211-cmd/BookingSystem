@@ -7,6 +7,7 @@
 #include "readUtils.h"
 #include "createUser.h"
 #include "DBUtils.h"
+#include "createReservation.h"
 #include <errno.h>
 
 char* message;
@@ -74,7 +75,6 @@ void supplier_startSession
 
 int supplier_userMainCicle(int clientFd,char* username) {
 	char* filePath;
-	filePath = createUserView(username);
 	do {
 		message = "Choose next action to execute:\n";
 		write(clientFd,message,strlen(message)+1);
@@ -89,15 +89,18 @@ int supplier_userMainCicle(int clientFd,char* username) {
 				free(filePath);
 				return 0;
 			case '1':
+				filePath = createView(username,1);
 				int myReservationsFd=open(filePath,O_RDONLY);
 				char* file=fileIntoString(myReservationsFd);
 				write(clientFd,file,strlen(file)+1);
 				break;
 			case '2': 
 				printf("option 2\n");
+				//spostare in metodo creazione reservation
+				filePath = createView(resource,2);
 				break;
 			case '3':
-				printf("option3\n");
+				createReservation(username);
 				break;
 			default:
 				message = "Please choose a valid option\n";

@@ -1,3 +1,2 @@
-char* createUserView(char*);
-int createTempView();
-char* users_select_byUserame(char*,int);
+char* createView(char*, int);
+void insertRecord();

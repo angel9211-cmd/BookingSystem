@@ -11,18 +11,20 @@
 // funzione che scrive quel record e ripete la ricerca da dove ci siamo
 // fermati
 
-//funzioni che creano file da usare come viste
-char* createUserView(char* username){
+// crea file da usare come vista su un elemento in input
+//TODO: cambiare nome e rendere generale per users e resources
+char* createView(char* field, int k){
 	//TODO: aggiungere messaggio in caso no reservations
 	char* filePath = calloc(20, sizeof(char));
 	char buffer[1]; // buffer per poter usare read()
 	int end;
-	sprintf(filePath,"%sReservations.txt",username);
+	sprintf(filePath,"%sReservations.txt",field);
 	int myReservationsFd=open(filePath, O_CREAT|O_RDWR, 0660);
 	int reservationsFd=open("../reservations.txt", O_RDONLY);
 	while (read(reservationsFd,buffer,1)>0) {
-		skipToField(reservationsFd,1); // spostamento su campo username
-		if (confrontFromFile(reservationsFd,username)==TRUE) {
+		//CAMBIARE
+		skipToField(reservationsFd,k); // spostamento su campo di field
+		if (confrontFromFile(reservationsFd,field)==TRUE) {
 			backToStartField(reservationsFd);
 			copyRecord(reservationsFd,myReservationsFd);
 		} else {
@@ -33,22 +35,9 @@ char* createUserView(char* username){
 	close(myReservationsFd);
 	return filePath;
 }
-	
-int createTempView(){
-	int tempFileFd=open("/temp.txt", O_CREAT|O_RDWR, 0660);
-	return tempFileFd;
-}
 
-//funzioni che simulano una query sul file 
-char* users_selectAll_byUserame(char* username,int offset) {
-	char record [100];
-	int usersFd=open("../users.txt", O_RDONLY);
-	if (usersFd<0) {
-		perror("Error while opening users.txt");
-		exit(-1);
-	}
+void insertRecord () {
 	
-	
-	
-	return 0;
 }
+	
+	
